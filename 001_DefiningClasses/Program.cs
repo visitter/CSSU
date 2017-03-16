@@ -215,20 +215,44 @@ namespace _001_DefiningClasses
             }
         }
 
+        
         static void CarRace()
         {
-            CarManager list = new CarManager();
-            try
-            {
-                list.AddCar(new Car("AudiA4", 23, 0.3));
-                list.AddCar(new Car("BMW-M2", 45, 0.42));
+            Console.WriteLine("Car count? =");
+            int cars = Int32.Parse(Console.ReadLine());
+            List<Car> list = new List<Car>();
 
-                
-                
-            }catch(Exception e)
+            for (int i =0; i<cars; i++)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine("Enter car data<Model><Fuel><F1KM>");
+                String[] arr = Console.ReadLine().Split(' ');
+                try
+                {
+                    list.Add(new Car(arr[0], Double.Parse(arr[1]), Double.Parse(arr[2])));
+                }catch(Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    i--;
+                }                
             }
+
+            String[] dArr;
+            do
+            {
+                Console.WriteLine("Enter a car to drive");
+                dArr = Console.ReadLine().Split(' ');
+                if (dArr[0] == "Drive")
+                {
+                    Car.GetCarByModel(dArr[1])?.Drive(Double.Parse(dArr[2]));
+                }
+
+            } while (dArr[0] != "End");
+           
+            foreach (var item in list)
+            {
+                Console.WriteLine(item);
+            }
+
         }
     }
 }
