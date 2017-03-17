@@ -12,7 +12,10 @@ namespace _001_DefiningClasses
             //CreatePersonObjects();
             //PersonSortedList();
             //ITCompany();
-            CarRace();
+            //CarRace();
+            CargoCompany();
+
+
             Console.ReadLine();
         }
 
@@ -49,7 +52,6 @@ namespace _001_DefiningClasses
 
             Console.WriteLine("{0} {1}", personWithAgeAndName.Name, personWithAgeAndName.Age);
         }
-
         static void CreatePersonObjects()
         {
             Person p1 = new Person();
@@ -64,7 +66,6 @@ namespace _001_DefiningClasses
             Person p4 = new Person("Ivan", 35);
             p4.DisplayPersonInfo();
         }
-
         static void PersonSortedList()
         {
             String op = "";
@@ -102,7 +103,6 @@ namespace _001_DefiningClasses
                 }
             }
         }
-
         public static int PersonCompare( Person a, Person b)
         {
             int res = a.Name.CompareTo(b.Name);
@@ -111,7 +111,6 @@ namespace _001_DefiningClasses
             else
                 return a.Age.CompareTo(b.Age);
         }
-
         public static void ITCompany()
         {
             String op = "";
@@ -214,8 +213,6 @@ namespace _001_DefiningClasses
                     Console.WriteLine(item);
             }
         }
-
-        
         static void CarRace()
         {
             Console.WriteLine("Car count? =");
@@ -253,6 +250,72 @@ namespace _001_DefiningClasses
                 Console.WriteLine(item);
             }
 
+        }
+        static void CargoCompany()
+        {
+            Console.WriteLine("Cargo company starting....");
+            
+            List<CargoCar> list = new List<CargoCar>();
+
+            Console.WriteLine("Enter a car count");
+            int count = Int32.Parse(Console.ReadLine());
+
+            for (int i = 0; i < count; i++)
+            {
+                Console.WriteLine("Enter Car Info: Model EngineSpeed EnginePower CargoWeight CargoType Tire1Pressure Tire1Age Tire2Pressure Tire2Age Tire3Pressure Tire3Age Tire4Pressure Tire4Age");
+                String[] chars = Console.ReadLine().Split(' ');
+                list.Add(new CargoCar(
+                                        chars[0]
+                                        , Int32.Parse(chars[1])
+                                        , Int32.Parse(chars[2])
+                                        , Int32.Parse(chars[3])
+                                        , chars[4]=="fragile"?Cargo.CargoType.FRAGILE: Cargo.CargoType.FLAMMABLE
+                                        , Double.Parse(chars[5])
+                                        , Int32.Parse(chars[6])
+                                        , Double.Parse(chars[7])
+                                        , Int32.Parse(chars[8])
+                                        , Double.Parse(chars[9])
+                                        , Int32.Parse(chars[10])
+                                        , Double.Parse(chars[11])
+                                        , Int32.Parse(chars[12])));
+            }
+            Console.WriteLine("cars ok\n");
+
+            Console.WriteLine("fragile or flammable or end?");
+            string command;
+            do
+            {                
+                command = Console.ReadLine();
+                switch (command)
+                {
+                    case "fragile":
+                        {
+                            foreach (CargoCar item in list)
+                            {
+                                if (item.CheckForLowPreasureTire(1))
+                                {
+                                    Console.WriteLine(item.Model);
+                                }
+                            }
+                            break;
+                        }
+                    case "flammable":
+                        {
+                            foreach (CargoCar item in list)
+                            {
+                                if (item.Engine.Power > 250)
+                                {
+                                    Console.WriteLine(item.Model);
+                                }
+                            }
+                            break;
+                        }
+                    case "end":break;
+
+                    default:
+                        { Console.WriteLine("Invalid command. Type fragile or flammable or end"); break; }
+                }
+            } while (command != "end");
         }
     }
 }

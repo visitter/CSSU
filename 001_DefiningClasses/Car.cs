@@ -29,7 +29,7 @@ namespace _001_DefiningClasses
                 //Console.WriteLine($"Max distance:{maxDistance}");
                 Console.WriteLine($"Driving {amountOfKM}");
                 FuelAmount -= FuelP1KM * amountOfKM;
-                DistanceTraveled = amountOfKM;
+                DistanceTraveled += amountOfKM;
             }
             else
             {
