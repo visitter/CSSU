@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Xml.Linq;
+using System.Linq;
 
 namespace _001_DefiningClasses
 {
@@ -13,10 +15,51 @@ namespace _001_DefiningClasses
             //PersonSortedList();
             //ITCompany();
             //CarRace();
-            CargoCompany();
-
+            //CargoCompany();
+            ReadXML();
 
             Console.ReadLine();
+        }
+        public static void ReadXML()
+        {
+            string cXML = @"<contractStatus xmlns:i='http://www.w3.org/2001/XMLSchema-instance' xmlns='http://schemas.datacontract.org/2004/07/RESTfulConnector.MyClaimService'>
+                                <PropertyChanged xmlns:d2p1 = 'http://schemas.datacontract.org/2004/07/System.ComponentModel' i:nil = 'true' />     
+                                <descriptionField>Определяне на дата за сервиз</descriptionField>
+                                <iconField>icon-status-wait</iconField>
+                                <nameField>Mediator_arranged</nameField>
+                                <networkTypeField>EUROHOLD</networkTypeField>
+                                <originalNameField>Mediator_arranged</originalNameField>
+                                <statusIdField>105981</statusIdField>
+                                <statusIdFieldSpecified>true</statusIdFieldSpecified>
+                                <statusTypeField>custom</statusTypeField>
+                          </contractStatus>";            
+            XDocument xml = XDocument.Parse(RemoveAllNamespaces(cXML));
+            var var = (xml.Root.Element("originalNameField")?.Value)!=null? xml.Root.Element("originalNameField").Value:null;
+            Console.WriteLine(var); 
+        }
+
+        //Implemented based on interface, not part of algorithm
+        public static string RemoveAllNamespaces(string xmlDocument)
+        {
+            XElement xmlDocumentWithoutNs = RemoveAllNamespaces(XElement.Parse(xmlDocument));
+
+            return xmlDocumentWithoutNs.ToString();
+        }
+
+        //Core recursion function
+        private static XElement RemoveAllNamespaces(XElement xmlDocument)
+        {
+            if (!xmlDocument.HasElements)
+            {   
+                XElement xElement = new XElement(xmlDocument.Name.LocalName);
+                xElement.Value = xmlDocument.Value;
+
+                //foreach (XAttribute attribute in xmlDocument.Attributes())
+                    //xElement.Add(attribute);
+
+                return xElement;
+            }
+            return new XElement(xmlDocument.Name.LocalName, xmlDocument.Elements().Select(el => RemoveAllNamespaces(el)));
         }
 
         static void TestPerson()
@@ -279,7 +322,8 @@ namespace _001_DefiningClasses
                                         , Double.Parse(chars[11])
                                         , Int32.Parse(chars[12])));
             }
-            Console.WriteLine("cars ok\n");
+            Console.WriteLine("cars ok\n");          
+
 
             Console.WriteLine("fragile or flammable or end?");
             string command;
